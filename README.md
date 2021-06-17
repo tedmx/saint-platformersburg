@@ -1,3 +1,3 @@
 # saint-platformersburg
 
-Playing with the most basic stuff in Unity. 2D platformer kind of stuff.
+Playing with the most basic 2D platformer stuff in Unity 😀
