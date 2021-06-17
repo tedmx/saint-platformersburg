@@ -12,6 +12,8 @@ namespace Platformer.Mechanics
     {
         public static GameController Instance { get; private set; }
 
+        public GameObject enemyPrefab;
+
         //This model field is public and can be therefore be modified in the 
         //inspector.
         //The reference actually comes from the InstanceRegister, and is shared
@@ -19,6 +21,23 @@ namespace Platformer.Mechanics
         //shared reference when the scene loads, allowing the model to be
         //conveniently configured inside the inspector.
         public PlatformerModel model = Simulation.GetModel<PlatformerModel>();
+
+
+        void Awake()
+        {
+            Debug.Log("ab ab ab");
+            Invoke("CloneEnemy", 3.0f);
+        }
+
+
+        public void CloneEnemy()
+        {
+            var clone = Instantiate(enemyPrefab, new Vector3(5.0f - Random.value * 10.0f, 3.0f, 0), Quaternion.identity);
+            EnemyController clonedEnemy = clone.GetComponent<EnemyController>();
+            clonedEnemy.isSample = false;
+            clone.layer = 3;
+            Invoke("CloneEnemy", 7.0f);
+        }
 
         void OnEnable()
         {

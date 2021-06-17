@@ -14,6 +14,7 @@ namespace Platformer.Mechanics
     {
         public PatrolPath path;
         public AudioClip ouch;
+        public bool isSample;
 
         internal PatrolPath.Mover mover;
         internal AnimationController control;
@@ -22,6 +23,8 @@ namespace Platformer.Mechanics
         SpriteRenderer spriteRenderer;
         public ParticleSystem bloodSplash;
         Vector2 move;
+        bool isDying = false;
+        Vector3 deathPos;
 
         public Bounds Bounds => _collider.bounds;
 
@@ -44,7 +47,9 @@ namespace Platformer.Mechanics
 
         public void Die()
         {
+            deathPos = transform.position;
             Schedule<EnemyDeath>().enemy = this;
+            isDying = true;
             Invoke("DestroyGObj", 1.5f);
 
             bloodSplash.Play();
@@ -52,6 +57,10 @@ namespace Platformer.Mechanics
 
         void OnCollisionEnter2D(Collision2D collision)
         {
+            if (isDying)
+            {
+                return;
+            }
             var player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
@@ -63,6 +72,10 @@ namespace Platformer.Mechanics
 
         void Update()
         {
+            if (isSample || isDying)
+            {
+                return;
+            }
 
             if (path != null)
             {
@@ -72,11 +85,6 @@ namespace Platformer.Mechanics
             else
             {
                 var player = GameObject.FindWithTag("Player");
-                
-                // transform.LookAt(player.transform);
-
-                Debug.Log("x440");
-                Debug.Log(player.transform.position);
 
                 Vector3 toPlayerVector = Vector3.right;
                 if (player.transform.position.x < transform.position.x)

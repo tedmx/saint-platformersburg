@@ -42,6 +42,8 @@ namespace Platformer.Mechanics
 
         public Bounds Bounds => collider2d.bounds;
 
+        public bool facingRight = true;
+
         void Awake()
         {
             health = GetComponent<Health>();
@@ -56,6 +58,7 @@ namespace Platformer.Mechanics
             if (controlEnabled)
             {
                 move.x = Input.GetAxis("Horizontal");
+                Debug.Log(Input.GetAxis("Horizontal"));
                 if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
                     jumpState = JumpState.PrepareToJump;
                 else if (Input.GetButtonUp("Jump"))
@@ -119,9 +122,15 @@ namespace Platformer.Mechanics
             }
 
             if (move.x > 0.01f)
+            { 
                 spriteRenderer.flipX = false;
+                facingRight = true;
+            }
             else if (move.x < -0.01f)
+            {
                 spriteRenderer.flipX = true;
+                facingRight = false;
+            }
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
