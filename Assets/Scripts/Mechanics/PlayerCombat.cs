@@ -55,9 +55,7 @@ namespace Platformer.Mechanics
             } else
             {
                 attackPoint.position = new Vector3(playerGO.transform.position.x - 0.5f, playerGO.transform.position.y - 0.02f);
-                //attackPoint.position = new Vector3(-0.5f, -0.02f);
             }
-            // if (playerGO.transform.rotation)
         }
 
         void OnDrawGizmosSelected () {

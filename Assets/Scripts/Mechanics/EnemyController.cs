@@ -21,12 +21,14 @@ namespace Platformer.Mechanics
         internal Collider2D _collider;
         internal AudioSource _audio;
         SpriteRenderer spriteRenderer;
-        public ParticleSystem bloodSplash;
         Vector2 move;
         bool isDying = false;
         Vector3 deathPos;
 
+        public GameObject bloodSplatPrefab;
+
         public Bounds Bounds => _collider.bounds;
+        internal Animator animator;
 
         void Awake()
         {
@@ -34,10 +36,7 @@ namespace Platformer.Mechanics
             _collider = GetComponent<Collider2D>();
             _audio = GetComponent<AudioSource>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            if (bloodSplash)
-            {
-                bloodSplash.Stop();
-            }
+            animator = GetComponent<Animator>();
         }
 
         public void DestroyGObj()
@@ -52,7 +51,11 @@ namespace Platformer.Mechanics
             isDying = true;
             Invoke("DestroyGObj", 1.5f);
 
+            var bloodSplashGO = Instantiate(bloodSplatPrefab, new Vector3(deathPos.x, deathPos.y, 0), Quaternion.identity);
+            ParticleSystem bloodSplash = bloodSplashGO.GetComponent<ParticleSystem>();
             bloodSplash.Play();
+
+            animator.SetTrigger("death");
         }
 
         void OnCollisionEnter2D(Collision2D collision)
