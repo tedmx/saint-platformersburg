@@ -51,6 +51,11 @@ namespace Platformer.Mechanics
             isDying = true;
             Invoke("DestroyGObj", 1.5f);
 
+            _collider.enabled = false;
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            rb.mass = 0.0f;
+            rb.gravityScale = 0.0f;
+
             var bloodSplashGO = Instantiate(bloodSplatPrefab, new Vector3(deathPos.x, deathPos.y, 0), Quaternion.identity);
             ParticleSystem bloodSplash = bloodSplashGO.GetComponent<ParticleSystem>();
             bloodSplash.Play();
